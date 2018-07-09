@@ -3,6 +3,7 @@ package com.codepath.tejen.simplechat;
 import android.app.Application;
 
 import com.parse.Parse;
+import com.parse.ParseObject;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -12,10 +13,14 @@ public class ChatApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        // Use for monitoring Parse network traffic
+        // need to make sure to register the Message class with Parse before calling Parse.initialize
+        ParseObject.registerSubclass(Message.class);
+
+        // Use for monitoring Parse OkHttp trafic
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         // Can be Level.BASIC, Level.HEADERS, or Level.BODY
+        // See http://square.github.io/okhttp/3.x/logging-interceptor/ to see the options.
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         builder.networkInterceptors().add(httpLoggingInterceptor);
 
